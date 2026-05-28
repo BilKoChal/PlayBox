@@ -30,6 +30,14 @@ yarn-error.log*
 # TypeScript cache
 *.tsbuildinfo
 
+# Generated JS/dts from TS config files (keep postcss.config.js which is source)
+capacitor.config.js
+capacitor.config.d.ts
+capacitor.config.d.ts.map
+vite.config.js
+vite.config.d.ts
+vite.config.d.ts.map
+
 # Vitest coverage
 coverage/
 

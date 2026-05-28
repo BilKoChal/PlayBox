@@ -9,9 +9,26 @@ import GamePage from '@/pages/GamePage';
 import FavoritesPage from '@/pages/FavoritesPage';
 import SettingsPage from '@/pages/SettingsPage';
 import { useFavorites } from '@/hooks/useFavorites';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import Toast, { useToast } from '@/components/feedback/Toast';
 import { getAllGameMetas, loadGame, getGameMeta } from '@/game-registry';
 import { gameRegistry } from '@/game-registry.generated';
+
+/**
+ * Offline banner shown when the browser loses network connectivity.
+ * Games that have been cached by the service worker remain playable.
+ */
+function OfflineBanner() {
+  const isOnline = useOnlineStatus();
+
+  if (isOnline) return null;
+
+  return (
+    <div className="bg-amber-500 text-white text-center py-2 px-4 text-sm font-semibold fixed top-0 left-0 right-0 z-50 shadow-md">
+      You are offline — cached games are still playable!
+    </div>
+  );
+}
 
 /**
  * Inner app that uses hooks requiring context providers.
@@ -36,6 +53,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-bg)]">
+      <OfflineBanner />
       <Header onSearch={() => {}} />
 
       <main className="flex-1 pb-16 md:pb-0">

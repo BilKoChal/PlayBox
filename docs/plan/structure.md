@@ -1,7 +1,7 @@
 # PlayBox — Current Project Structure
 
-**Last Updated:** 2026-05-28  
-**Phase:** 0.5 Complete
+**Last Updated:** 2026-05-28
+**Phase:** 0.6 Complete (Phase 0 FULLY COMPLETE)
 
 ---
 
@@ -30,13 +30,15 @@ playbox/
 │   │   │   ├── 2 - Platform Shell.md
 │   │   │   ├── 3 - Shared Services Core.md
 │   │   │   ├── 4 - MVP Games (3 Games).md
-│   │   │   └── 5 - CI_CD Pipeline.md
+│   │   │   ├── 5 - CI_CD Pipeline.md
+│   │   │   └── 6 - PWA and Offline.md
 │   │   ├── worklogs/
 │   │   │   ├── 1 - worklog.md
 │   │   │   ├── 2 - worklog.md
 │   │   │   ├── 3 - worklog.md
 │   │   │   ├── 4 - worklog.md
-│   │   │   └── 5 - worklog.md
+│   │   │   ├── 5 - worklog.md
+│   │   │   └── 6 - worklog.md
 │   │   └── research/                     # (Empty — research in docs/reports/)
 │   └── reports/
 │       ├── PlayBox_architect_report.md   # Architecture research
@@ -46,7 +48,12 @@ playbox/
 │       └── PlayBox_catalog_report.md     # Game catalog research
 │
 ├── public/
-│   ├── icons/                            # PWA icons (placeholder)
+│   ├── icons/                            # PWA icons
+│   │   ├── icon-192.png                  # Standard 192x192 icon
+│   │   ├── icon-512.png                  # Standard 512x512 icon
+│   │   ├── icon-maskable-192.png         # Maskable 192x192 icon
+│   │   ├── icon-maskable-512.png         # Maskable 512x512 icon
+│   │   └── icon-source.png              # Source 1024x1024 AI-generated icon
 │   ├── games/                            # Game assets & thumbnails
 │   │   ├── sudoku/
 │   │   │   └── thumbnail.png             # AI-generated Sudoku thumbnail
@@ -54,7 +61,7 @@ playbox/
 │   │   │   └── thumbnail.png             # AI-generated Snake thumbnail
 │   │   └── breakout/
 │   │       └── thumbnail.png             # AI-generated Breakout thumbnail
-│   ├── manifest.json                     # PWA manifest
+│   ├── favicon.ico                       # Favicon (32x32, generated from icon source)
 │   └── robots.txt                        # Robots file
 │
 ├── scripts/
@@ -63,8 +70,8 @@ playbox/
 │   └── copy-404.js                       # SPA routing fix for GitHub Pages (ESM)
 │
 ├── src/
-│   ├── main.tsx                          # React entry point
-│   ├── App.tsx                           # Root component with routing + providers
+│   ├── main.tsx                          # React entry point + SW registration
+│   ├── App.tsx                           # Root component with routing + providers + offline banner
 │   ├── vite-env.d.ts                     # Vite + Tauri + PWA type declarations
 │   │
 │   ├── components/                       # UI Components
@@ -81,7 +88,8 @@ playbox/
 │   ├── hooks/                            # Custom Hooks
 │   │   ├── useFavorites.ts              # Favorites management
 │   │   ├── useFullscreen.ts             # Fullscreen API hook
-│   │   └── useSearch.ts                 # Search with debounce
+│   │   ├── useSearch.ts                 # Search with debounce
+│   │   └── useOnlineStatus.ts           # Online/offline status detection
 │   │
 │   ├── lib/                              # Shared Libraries
 │   │   ├── audio.ts                      # SoundManager (Web Audio API, procedural sounds)
@@ -126,12 +134,12 @@ playbox/
 │   └── icons/                            # (Placeholder)
 │
 ├── capacitor.config.ts                   # Capacitor 6 config (Android)
-├── index.html                            # SPA entry HTML
+├── index.html                            # SPA entry HTML (PWA meta tags)
 ├── package.json                          # Project manifest (0.1.0)
 ├── pnpm-lock.yaml                        # Lock file
 ├── tsconfig.json                         # TypeScript config (strict)
 ├── tsconfig.node.json                    # TypeScript node config (composite)
-├── vite.config.ts                        # Vite build config (code splitting)
+├── vite.config.ts                        # Vite build config (code splitting + PWA)
 ├── postcss.config.js                     # PostCSS config
 ├── .eslintrc.cjs                         # ESLint config
 ├── .prettierrc                           # Prettier config
@@ -152,7 +160,9 @@ playbox/
 | 0.3 | Shared Services (Core) | ✅ Complete |
 | 0.4 | MVP Games (3 Games) | ✅ Complete |
 | 0.5 | CI/CD Pipeline | ✅ Complete |
-| 0.6 | PWA & Offline | ⬜ Not started |
+| 0.6 | PWA & Offline | ✅ Complete |
+
+**Phase 0 — COMPLETE** 🎉
 
 ## Registered Games
 
@@ -161,6 +171,17 @@ playbox/
 | Sudoku | Canvas | Logic/Puzzle | Easy (4×4), Medium (6×6), Hard (9×9) |
 | Snake | Kaboom | Arcade | Easy (slow+wrap), Medium, Hard (fast+death) |
 | Breakout | Kaboom | Arcade | Easy (wide paddle), Medium, Hard (narrow paddle) |
+
+## PWA Caching Strategy
+
+| Resource | Strategy | Cache Name | TTL |
+|----------|----------|------------|-----|
+| App shell (HTML, CSS, JS) | Precache (build time) | workbox-precache | Until next deploy |
+| Game engine chunks | CacheFirst | engine-cache | 30 days |
+| Game chunk files | CacheFirst | game-chunks-cache | 7 days |
+| Game thumbnails | CacheFirst | game-assets-cache | 30 days |
+| Google Fonts CSS | CacheFirst | google-fonts-cache | 1 year |
+| Google Fonts files | CacheFirst | gstatic-fonts-cache | 1 year |
 
 ## CI/CD Pipeline
 

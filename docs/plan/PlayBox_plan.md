@@ -245,12 +245,19 @@ playbox/
 - [x] Build verified locally: tsc 0 errors, vite build 83 modules in 4.55s
 - **Note:** User must configure GitHub repo settings before first push: (1) Pages → Source = "GitHub Actions", (2) Actions → Workflow permissions = "Read and write". No secrets required for MVP. See [task plan](tasks/5%20-%20CI_CD%20Pipeline.md).
 
-#### 0.6 — PWA & Offline
-- Configure `vite-plugin-pwa` with Workbox
-- Set up precache for shell (HTML, CSS, JS bundles)
-- Set up cache-on-play for game assets and engine chunks
-- Create offline fallback page
-- Test install prompt and offline functionality
+#### 0.6 — PWA & Offline ✅ COMPLETE (2026-05-28)
+- [x] Configure `vite-plugin-pwa` with Workbox (generateSW mode, autoUpdate)
+- [x] Set up precache for shell (HTML, CSS, JS, icons — 31 entries, ~1302 KB)
+- [x] Set up cache-on-play for game engine chunks, game chunks, thumbnails, Google Fonts
+- [x] Create offline fallback via `navigateFallback: 'index.html'` (SPA routing offline)
+- [x] Create offline banner component (amber bar: "You are offline — cached games are still playable!")
+- [x] Generate PWA icons (192, 512, maskable variants) via z-ai-generate + PIL resize
+- [x] Generate favicon.ico from icon source
+- [x] Register service worker in `main.tsx` (production only, with update listener)
+- [x] Remove static `public/manifest.json` (vite-plugin-pwa generates `manifest.webmanifest`)
+- [x] Update `index.html` with full PWA meta tags (apple-touch-icon, mobile-web-app-capable, etc.)
+- [x] Create `useOnlineStatus` hook for online/offline detection
+- **Note:** Service worker precaches all app shell assets. Game engines (Kaboom/Phaser) and game chunks are cached on first play via runtime caching strategies. Google Fonts cached with 1-year expiry. See [worklog](worklogs/6%20-%20worklog.md).
 
 **Phase 0 Milestone:** PlayBox is live at `https://owner.github.io/playbox/` with 3 games, installable as PWA, with Windows and Android builds available in GitHub Releases.
 
