@@ -1,3 +1,13 @@
+/**
+ * Toast — Notification system with slide-in animation
+ *
+ * Phase 1.3 Polish:
+ * - Slide-in from right animation
+ * - Smooth exit transition
+ * - Better dark mode styling
+ * - Icon prefix per type
+ */
+
 import { useEffect, useState, useCallback } from 'react';
 
 export interface ToastMessage {
@@ -18,16 +28,29 @@ const typeStyles: Record<string, string> = {
   error: 'bg-[var(--color-accent-red)] text-white',
 };
 
+const typeIcons: Record<string, string> = {
+  info: 'ℹ️',
+  success: '✅',
+  warning: '⚠️',
+  error: '❌',
+};
+
 function ToastItem({ toast, onDismiss }: { toast: ToastMessage; onDismiss: (id: string) => void }) {
   const [isLeaving, setIsLeaving] = useState(false);
+  const [isEntering, setIsEntering] = useState(true);
+
+  // Trigger enter animation
+  useEffect(() => {
+    requestAnimationFrame(() => setIsEntering(false));
+  }, []);
 
   const handleDismiss = useCallback(() => {
     setIsLeaving(true);
-    setTimeout(() => onDismiss(toast.id), 200);
+    setTimeout(() => onDismiss(toast.id), 250);
   }, [toast.id, onDismiss]);
 
   useEffect(() => {
-    const timer = setTimeout(handleDismiss, 3000);
+    const timer = setTimeout(handleDismiss, 3500);
     return () => clearTimeout(timer);
   }, [handleDismiss]);
 
@@ -36,17 +59,19 @@ function ToastItem({ toast, onDismiss }: { toast: ToastMessage; onDismiss: (id: 
       className={`
         px-4 py-3 rounded-xl shadow-[var(--shadow-lg)]
         font-[var(--font-body)] text-sm font-semibold
-        flex items-center gap-2 min-w-[200px] max-w-[360px]
-        transition-all duration-200
-        ${isLeaving ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}
+        flex items-center gap-2.5 min-w-[220px] max-w-[380px]
+        transition-all duration-250 ease-out
+        ${isEntering ? 'opacity-0 translate-x-8' : 'opacity-100 translate-x-0'}
+        ${isLeaving ? 'opacity-0 translate-x-8 scale-95' : ''}
         ${typeStyles[toast.type || 'info']}
       `}
       role="alert"
     >
+      <span className="text-base flex-shrink-0">{typeIcons[toast.type || 'info']}</span>
       <span className="flex-1">{toast.message}</span>
       <button
         onClick={handleDismiss}
-        className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
+        className="ml-1 opacity-60 hover:opacity-100 transition-opacity flex-shrink-0"
         aria-label="Dismiss"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,7 +86,7 @@ export default function Toast({ toasts, onDismiss }: ToastProps) {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2">
+    <div className="fixed bottom-20 md:bottom-4 right-4 z-[100] flex flex-col gap-2">
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onDismiss={onDismiss} />
       ))}

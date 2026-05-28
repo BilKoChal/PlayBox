@@ -1,10 +1,11 @@
 /**
  * FavoritesPage — User's favorite games collection
  *
- * Features:
- * - Grid of favorited games
- * - Clear all button
- * - Empty state with browse link
+ * Phase 1.3 Polish:
+ * - Staggered card animations
+ * - Better header with animated count badge
+ * - Smooth empty state transition
+ * - Clear all with confirmation polish
  */
 
 import type { GameMetadata } from '@/types/game';
@@ -37,7 +38,11 @@ export default function FavoritesPage({
           <span className="text-[var(--color-accent-red)]">❤️</span>
           My Favorites
           {favoriteGames.length > 0 && (
-            <span className="text-sm font-semibold text-[var(--color-text-secondary)] bg-[var(--color-bg-hover)] px-2 py-0.5 rounded-full">
+            <span className="
+              text-sm font-semibold text-[var(--color-accent-red)]
+              bg-[var(--color-accent-red)]/10 px-2.5 py-0.5 rounded-full
+              animate-[popIn_300ms_ease-out]
+            ">
               {favoriteGames.length}
             </span>
           )}
@@ -51,12 +56,13 @@ export default function FavoritesPage({
 
       {favoriteGames.length > 0 ? (
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {favoriteGames.map((game) => (
+          {favoriteGames.map((game, index) => (
             <GameCard
               key={game.id}
               game={game}
               isFavorite={isFavorite(game.id)}
               onToggleFavorite={onToggleFavorite}
+              staggerIndex={index}
             />
           ))}
         </div>

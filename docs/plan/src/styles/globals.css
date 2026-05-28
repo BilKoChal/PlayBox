@@ -103,6 +103,11 @@
   --color-accent-purple: #B580F0;
   --color-accent-orange: #FFA868;
   --color-accent-red: #F06888;
+
+  /* Dark mode glow effects */
+  --glow-primary: 0 0 20px rgba(255, 207, 112, 0.15);
+  --glow-secondary: 0 0 20px rgba(124, 196, 232, 0.15);
+  --glow-accent: 0 0 15px rgba(181, 128, 240, 0.12);
 }
 
 /* ============================================
@@ -149,6 +154,15 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-sm);
 }
 
+/* Hide scrollbar but keep scrolling */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* ============================================
    Animations
    ============================================ */
@@ -166,9 +180,24 @@ h1, h2, h3, h4, h5, h6 {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes shimmer {
@@ -176,7 +205,91 @@ h1, h2, h3, h4, h5, h6 {
   100% { background-position: 200% 0; }
 }
 
-/* Reduced motion support */
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pillBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  70% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 184, 48, 0.3); }
+  50% { box-shadow: 0 0 12px 4px rgba(255, 184, 48, 0.15); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@keyframes countdownPulse {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes toastSlideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   Dark Mode Glow Effects
+   ============================================ */
+
+.dark .glow-primary {
+  box-shadow: var(--glow-primary, 0 0 20px rgba(255, 207, 112, 0.15));
+}
+
+.dark .glow-secondary {
+  box-shadow: var(--glow-secondary, 0 0 20px rgba(124, 196, 232, 0.15));
+}
+
+.dark .glow-accent {
+  box-shadow: var(--glow-accent, 0 0 15px rgba(181, 128, 240, 0.12));
+}
+
+/* Dark mode card hover glow */
+.dark .card-glow:hover {
+  box-shadow: 0 8px 30px rgba(255, 207, 112, 0.08),
+              0 0 0 1px rgba(255, 207, 112, 0.1);
+}
+
+/* Dark mode active pill glow */
+.dark .pill-active-glow {
+  box-shadow: 0 0 16px rgba(255, 207, 112, 0.2);
+}
+
+/* ============================================
+   Reduced Motion Support
+   ============================================ */
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -186,7 +299,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Game container — fills available space */
+/* ============================================
+   Game Container
+   ============================================ */
+
 .game-container {
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -196,7 +312,10 @@ h1, h2, h3, h4, h5, h6 {
   background: #000;
 }
 
-/* Scrollbar styling */
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -213,4 +332,17 @@ h1, h2, h3, h4, h5, h6 {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-muted);
+}
+
+/* ============================================
+   Responsive Breakpoint Helpers
+   ============================================ */
+
+/* Bottom nav safe area for mobile */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
 }

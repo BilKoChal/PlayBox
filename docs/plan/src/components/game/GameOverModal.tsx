@@ -1,14 +1,11 @@
 /**
  * GameOverModal — Score submission flow with player name prompt
  *
- * Shows when a game ends:
- * 1. Final score display
- * 2. "New High Score!" celebration if applicable
- * 3. Player name input (with saved name from localStorage)
- * 4. Submit score button
- * 5. Leaderboard tab showing top 10 scores
- *
- * Uses ScoreTracker for persistence and PlayerNameManager for name.
+ * Phase 1.3 Polish:
+ * - Animated trophy icon
+ * - Smooth score counter display
+ * - Better button styling
+ * - Polished leaderboard section
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -99,16 +96,16 @@ export default function GameOverModal({
       >
         <div className="space-y-4">
           {/* Score display */}
-          <div className="text-center py-4">
+          <div className="text-center py-3">
             {isNewHigh && (
-              <div className="mb-2 animate-bounce">
-                <span className="text-3xl">🏆</span>
+              <div className="mb-2 animate-[float_2s_ease-in-out_infinite]">
+                <span className="text-4xl">🏆</span>
                 <p className="text-lg font-extrabold font-[var(--font-heading)] text-[var(--color-primary)]">
                   New High Score!
                 </p>
               </div>
             )}
-            <p className="text-4xl font-extrabold font-[var(--font-heading)] text-[var(--color-text)]">
+            <p className="text-4xl font-extrabold font-[var(--font-heading)] text-[var(--color-text)] tabular-nums">
               {finalScore.toLocaleString()}
             </p>
             <p className="text-sm text-[var(--color-text-secondary)] font-[var(--font-body)] mt-1">
@@ -122,7 +119,7 @@ export default function GameOverModal({
               <div>
                 <label
                   htmlFor="player-name"
-                  className="block text-sm font-semibold text-[var(--color-text)] font-[var(--font-body)] mb-1"
+                  className="block text-sm font-semibold text-[var(--color-text)] font-[var(--font-body)] mb-1.5"
                 >
                   Your Name
                 </label>
@@ -134,10 +131,11 @@ export default function GameOverModal({
                   placeholder="Enter your name"
                   maxLength={20}
                   className="
-                    w-full px-3 py-2 rounded-lg text-sm
+                    w-full px-3.5 py-2.5 rounded-xl text-sm
                     bg-[var(--color-bg)] border border-[var(--color-border)]
                     text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]
-                    focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]
+                    focus:outline-none focus:ring-3 focus:ring-[var(--color-secondary)]/30 focus:border-[var(--color-secondary)]
+                    transition-all duration-200
                     font-[var(--font-body)]
                   "
                   onKeyDown={(e) => {
@@ -160,7 +158,7 @@ export default function GameOverModal({
 
           {/* Score submitted confirmation */}
           {hasSubmitted && (
-            <div className="text-center py-2">
+            <div className="text-center py-2 animate-[popIn_300ms_ease-out]">
               <span className="text-2xl">✅</span>
               <p className="text-sm font-semibold text-[var(--color-accent-green)] font-[var(--font-body)] mt-1">
                 Score saved!
@@ -170,8 +168,8 @@ export default function GameOverModal({
 
           {/* Leaderboard */}
           <div className="border-t border-[var(--color-border)] pt-4">
-            <h3 className="text-sm font-bold text-[var(--color-text)] font-[var(--font-heading)] mb-3">
-              Top Scores
+            <h3 className="text-sm font-bold text-[var(--color-text)] font-[var(--font-heading)] mb-3 flex items-center gap-2">
+              <span>🏆</span> Top Scores
             </h3>
             <Leaderboard
               scores={topScores}
@@ -190,7 +188,7 @@ export default function GameOverModal({
                 onClick={onPlayAgain}
                 className="flex-1"
               >
-                Play Again
+                🔄 Play Again
               </Button>
             )}
             <Button
@@ -199,7 +197,7 @@ export default function GameOverModal({
               onClick={onClose}
               className={onPlayAgain ? '' : 'flex-1'}
             >
-              Back to Games
+              ← Back to Games
             </Button>
           </div>
         </div>

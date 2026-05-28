@@ -1,13 +1,11 @@
 /**
  * SearchBar — Enhanced with autocomplete dropdown and recent searches
  *
- * Features:
- * - Real-time fuzzy search via Fuse.js
- * - Autocomplete dropdown showing matching games
- * - Recent searches list (stored in localStorage, max 5)
- * - Debounced input for performance
- * - Keyboard navigation (up/down/enter/escape)
- * - Click outside to close dropdown
+ * Phase 1.3 Polish:
+ * - Smooth focus ring animation
+ * - Animated dropdown appearance
+ * - Better result items with hover effects
+ * - Rounded search input matching design system
  */
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
@@ -26,7 +24,7 @@ interface SearchBarProps {
 export default function SearchBar({
   onSearch,
   games = [],
-  placeholder = 'Search games...',
+  placeholder = 'Find a game...',
   className = '',
   showAutocomplete = true,
 }: SearchBarProps) {
@@ -159,7 +157,8 @@ export default function SearchBar({
       <div className="relative">
         {/* Search icon */}
         <svg
-          className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)]"
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-muted)] transition-colors duration-200"
+          style={{ color: isFocused ? 'var(--color-secondary)' : undefined }}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -188,10 +187,10 @@ export default function SearchBar({
           className="
             w-full pl-10 pr-10 py-2.5
             bg-[var(--color-bg-card)] border border-[var(--color-border)]
-            rounded-xl text-[var(--color-text)] text-sm
+            rounded-2xl text-[var(--color-text)] text-sm
             placeholder:text-[var(--color-text-muted)]
-            focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)] focus:border-transparent
-            transition-all duration-[var(--transition-fast)]
+            focus:outline-none focus:ring-3 focus:ring-[var(--color-secondary)]/30 focus:border-[var(--color-secondary)]
+            transition-all duration-200
             font-[var(--font-body)]
             min-h-[44px]
           "
@@ -204,28 +203,32 @@ export default function SearchBar({
             onClick={handleClear}
             className="
               absolute right-3 top-1/2 -translate-y-1/2
-              w-5 h-5 flex items-center justify-center
+              w-6 h-6 flex items-center justify-center
               text-[var(--color-text-muted)] hover:text-[var(--color-text)]
-              rounded-full transition-colors
+              rounded-full transition-all duration-200
+              hover:bg-[var(--color-bg-hover)]
+              active:scale-90
             "
             aria-label="Clear search"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         )}
       </div>
 
-      {/* Autocomplete dropdown */}
+      {/* Autocomplete dropdown with animation */}
       {showDropdown && (
         <div
           ref={dropdownRef}
           className="
-            absolute top-full left-0 right-0 mt-1 z-50
+            absolute top-full left-0 right-0 mt-1.5 z-50
             bg-[var(--color-bg-card)] border border-[var(--color-border)]
             rounded-xl shadow-[var(--shadow-lg)]
+            dark:shadow-[0_10px_40px_rgba(0,0,0,0.4)]
             overflow-hidden max-h-[320px] overflow-y-auto
+            animate-[slideDown_150ms_ease-out]
           "
         >
           {/* Recent searches */}
@@ -240,7 +243,7 @@ export default function SearchBar({
                     e.preventDefault();
                     clearRecentSearches();
                   }}
-                  className="text-xs text-[var(--color-secondary)] hover:underline font-[var(--font-body)]"
+                  className="text-xs text-[var(--color-secondary)] hover:underline font-[var(--font-body)] transition-colors"
                 >
                   Clear
                 </button>
@@ -251,14 +254,14 @@ export default function SearchBar({
                   onClick={() => handleSelectRecent(recent)}
                   className={`
                     w-full text-left px-3 py-2.5 text-sm font-[var(--font-body)]
-                    flex items-center gap-2 transition-colors
+                    flex items-center gap-2 transition-all duration-150
                     ${selectedIndex === idx
                       ? 'bg-[var(--color-bg-hover)] text-[var(--color-text)]'
                       : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)]'
                     }
                   `}
                 >
-                  <svg className="w-3.5 h-3.5 flex-shrink-0 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 flex-shrink-0 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <span className="truncate">{recent}</span>
@@ -281,7 +284,7 @@ export default function SearchBar({
                   onClick={() => handleSelectGame(game)}
                   className={`
                     w-full text-left px-3 py-2.5 text-sm font-[var(--font-body)]
-                    flex items-center gap-3 transition-colors
+                    flex items-center gap-3 transition-all duration-150
                     ${selectedIndex === idx
                       ? 'bg-[var(--color-bg-hover)] text-[var(--color-text)]'
                       : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)]'

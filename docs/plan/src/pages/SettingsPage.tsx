@@ -1,12 +1,11 @@
 /**
  * SettingsPage — Global settings with score management
  *
- * Features:
- * - Theme toggle (light/dark)
- * - Sound toggle (mute/unmute)
- * - Score export/import (JSON file download/upload)
- * - Clear all scores
- * - About section
+ * Phase 1.3 Polish:
+ * - Animated section entries
+ * - Better status messages with slide-in
+ * - Section cards with hover effects
+ * - Polished toggle animations
  */
 
 import { useState, useCallback, useRef } from 'react';
@@ -90,28 +89,37 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6">
-      <h1 className="text-2xl font-extrabold font-[var(--font-heading)] text-[var(--color-text)] mb-6">
-        ⚙️ Settings
+      <h1 className="text-2xl font-extrabold font-[var(--font-heading)] text-[var(--color-text)] mb-6 flex items-center gap-2">
+        <span className="text-[var(--color-secondary)]">⚙️</span>
+        Settings
       </h1>
 
-      {/* Status message */}
+      {/* Status message with slide-in */}
       {statusMessage && (
         <div className={`
-          mb-4 px-4 py-2 rounded-lg text-sm font-semibold font-[var(--font-body)]
+          mb-4 px-4 py-2.5 rounded-xl text-sm font-semibold font-[var(--font-body)]
+          flex items-center gap-2
+          animate-[slideDown_200ms_ease-out]
           ${statusMessage.type === 'success'
             ? 'bg-[var(--color-accent-green)]/15 text-[var(--color-accent-green)]'
             : 'bg-[var(--color-accent-red)]/15 text-[var(--color-accent-red)]'
           }
         `}>
+          <span>{statusMessage.type === 'success' ? '✅' : '❌'}</span>
           {statusMessage.text}
         </div>
       )}
 
       <div className="space-y-4">
         {/* Appearance */}
-        <section className="bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] p-4">
-          <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-4">
-            Appearance
+        <section className="
+          bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] p-4
+          shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)]
+          transition-shadow duration-200
+          animate-[slideUp_300ms_ease-out_both]
+        ">
+          <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-4 flex items-center gap-2">
+            🎨 Appearance
           </h2>
 
           <div className="flex items-center justify-between py-2">
@@ -132,9 +140,14 @@ export default function SettingsPage() {
         </section>
 
         {/* Sound */}
-        <section className="bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] p-4">
-          <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-4">
-            Sound
+        <section className="
+          bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] p-4
+          shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)]
+          transition-shadow duration-200
+          animate-[slideUp_300ms_ease-out_50ms_both]
+        ">
+          <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-4 flex items-center gap-2">
+            🔊 Sound
           </h2>
 
           <div className="flex items-center justify-between py-2">
@@ -155,9 +168,14 @@ export default function SettingsPage() {
         </section>
 
         {/* Scores */}
-        <section className="bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] p-4">
-          <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-4">
-            Scores
+        <section className="
+          bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] p-4
+          shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)]
+          transition-shadow duration-200
+          animate-[slideUp_300ms_ease-out_100ms_both]
+        ">
+          <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-4 flex items-center gap-2">
+            🏆 Scores
           </h2>
 
           <div className="space-y-3">
@@ -205,21 +223,26 @@ export default function SettingsPage() {
         </section>
 
         {/* About */}
-        <section className="bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] p-4">
-          <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-4">
-            About PlayBox
+        <section className="
+          bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] p-4
+          shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)]
+          transition-shadow duration-200
+          animate-[slideUp_300ms_ease-out_150ms_both]
+        ">
+          <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-4 flex items-center gap-2">
+            💡 About PlayBox
           </h2>
 
-          <div className="space-y-2 text-sm font-[var(--font-body)]">
-            <div className="flex justify-between">
+          <div className="space-y-2.5 text-sm font-[var(--font-body)]">
+            <div className="flex justify-between items-center">
               <span className="text-[var(--color-text-secondary)]">Version</span>
-              <span className="text-[var(--color-text)] font-semibold">0.1.0</span>
+              <span className="text-[var(--color-text)] font-semibold px-2 py-0.5 rounded-full bg-[var(--color-bg-hover)] text-xs">0.1.0</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-[var(--color-text-secondary)]">Platform</span>
               <span className="text-[var(--color-text)] font-semibold capitalize">{platform.type}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-[var(--color-text-secondary)]">License</span>
               <span className="text-[var(--color-text)] font-semibold">MIT</span>
             </div>

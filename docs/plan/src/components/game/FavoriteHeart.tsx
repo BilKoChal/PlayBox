@@ -1,8 +1,11 @@
 /**
  * FavoriteHeart — Heart button with particle animation on toggle
  *
- * Shows a heart icon that bounces and emits particles when toggled.
- * Used on GameCard and in the GamePage toolbar.
+ * Phase 1.3 Polish:
+ * - Smooth scale bounce with CSS transition
+ * - Better particle animation with fade
+ * - Active:scale feedback
+ * - SVG heart with fill animation
  */
 
 import { useCallback, useRef, useEffect, useState } from 'react';
@@ -113,6 +116,7 @@ export default function FavoriteHeart({
       className={`
         relative flex items-center justify-center rounded-lg
         transition-all duration-200 touch-target
+        active:scale-90
         ${isFavorite
           ? 'text-[var(--color-accent-red)]'
           : 'text-[var(--color-text-muted)] hover:text-[var(--color-accent-red)]'
@@ -123,13 +127,13 @@ export default function FavoriteHeart({
       `}
       aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
     >
-      {/* Heart icon */}
+      {/* Heart icon with smooth fill transition */}
       <svg
         viewBox="0 0 24 24"
         className="w-full h-full p-1.5 transition-transform duration-200"
         fill={isFavorite ? 'currentColor' : 'none'}
         stroke="currentColor"
-        strokeWidth={2}
+        strokeWidth={isFavorite ? 0 : 2}
       >
         <path
           strokeLinecap="round"
@@ -151,6 +155,7 @@ export default function FavoriteHeart({
             height: p.size,
             backgroundColor: p.color,
             opacity: p.opacity,
+            transition: 'opacity 30ms ease',
           }}
         />
       ))}

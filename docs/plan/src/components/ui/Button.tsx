@@ -1,3 +1,13 @@
+/**
+ * Button — Reusable button with variants and sizes
+ *
+ * Phase 1.3 Polish:
+ * - Smooth active:scale animation
+ * - Better shadow transitions
+ * - Dark mode glow effects on primary
+ * - Focus ring improvement
+ */
+
 import { type ButtonHTMLAttributes, type ReactNode } from 'react';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
@@ -12,13 +22,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-[var(--color-primary)] text-[var(--color-text)] hover:bg-[var(--color-primary-dark)] active:scale-95 shadow-[var(--shadow-sm)]',
+    'bg-[var(--color-primary)] text-[var(--color-text)] hover:bg-[var(--color-primary-dark)] hover:shadow-[0_4px_12px_rgba(255,184,48,0.3)] active:scale-95 shadow-[var(--shadow-sm)] dark:hover:shadow-[0_4px_16px_rgba(255,207,112,0.2)]',
   secondary:
-    'bg-[var(--color-secondary)] text-white hover:bg-[var(--color-secondary-dark)] active:scale-95 shadow-[var(--shadow-sm)]',
+    'bg-[var(--color-secondary)] text-white hover:bg-[var(--color-secondary-dark)] hover:shadow-[0_4px_12px_rgba(77,168,218,0.3)] active:scale-95 shadow-[var(--shadow-sm)]',
   ghost:
     'bg-transparent text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] active:scale-95',
   danger:
-    'bg-[var(--color-accent-red)] text-white hover:opacity-90 active:scale-95 shadow-[var(--shadow-sm)]',
+    'bg-[var(--color-accent-red)] text-white hover:opacity-90 hover:shadow-[0_4px_12px_rgba(239,71,111,0.3)] active:scale-95 shadow-[var(--shadow-sm)]',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -41,7 +51,7 @@ export default function Button({
       className={`
         inline-flex items-center justify-center gap-2
         font-semibold font-[var(--font-body)]
-        transition-all duration-[var(--transition-fast)]
+        transition-all duration-200
         focus-ring touch-target
         ${variantClasses[variant]}
         ${sizeClasses[size]}

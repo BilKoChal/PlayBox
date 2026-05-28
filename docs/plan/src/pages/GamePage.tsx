@@ -1,13 +1,12 @@
 /**
  * GamePage — Individual game play page
  *
- * Features:
- * - Game toolbar with back, title, score, favorite heart
- * - Difficulty selector
- * - GameWrapper for game lifecycle
- * - GameOverModal for score submission
- * - Leaderboard display
- * - Game info section
+ * Phase 1.3 Polish:
+ * - Game loading 7-phase sequence
+ * - Smooth page transitions
+ * - Better toolbar with dark mode polish
+ * - Animated score display
+ * - Polished leaderboard section
  */
 
 import { useState, useCallback, useEffect } from 'react';
@@ -58,7 +57,8 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
   const [error, setError] = useState<string | null>(null);
   const [showGameOver, setShowGameOver] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
-  const [gameKey, setGameKey] = useState(0); // Used to remount GameWrapper
+  const [gameKey, setGameKey] = useState(0);
+  const [isPageVisible, setIsPageVisible] = useState(false);
 
   const metadata = gameId ? gameMeta(gameId) : undefined;
   const fav = gameId ? isFavorite(gameId) : false;
@@ -70,6 +70,11 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
     difficulty,
     scoreType,
   );
+
+  // Page entrance animation
+  useEffect(() => {
+    requestAnimationFrame(() => setIsPageVisible(true));
+  }, []);
 
   // Load game on mount
   useEffect(() => {
@@ -167,7 +172,13 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
   }, [refreshScores]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+    <div
+      className={`
+        max-w-4xl mx-auto px-4 sm:px-6 py-4
+        transition-all duration-300 ease-out
+        ${isPageVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
+      `}
+    >
       {/* Game toolbar */}
       <div className="flex items-center justify-between mb-4 gap-3">
         <div className="flex items-center gap-3">
@@ -185,8 +196,11 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
             <span className="hidden sm:inline">Back</span>
           </Button>
 
-          {/* Game title */}
-          <h1 className="text-lg font-bold font-[var(--font-heading)] text-[var(--color-text)] truncate">
+          {/* Game title with category emoji */}
+          <h1 className="text-lg font-bold font-[var(--font-heading)] text-[var(--color-text)] truncate flex items-center gap-2">
+            {metadata && (
+              <span className="text-xl">{CATEGORIES_EMOJI[metadata.category] || '🎮'}</span>
+            )}
             {metadata?.name || gameId}
           </h1>
         </div>
@@ -208,7 +222,7 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
 
       {/* Difficulty selector */}
       {metadata && (
-        <div className="mb-4">
+        <div className="mb-4 animate-[fadeIn_300ms_ease-out_100ms_both]">
           <DifficultySelector
             selected={difficulty}
             onSelect={handleDifficultyChange}
@@ -220,9 +234,12 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
       )}
 
       {/* Game area */}
-      <div className="relative">
+      <div className="relative rounded-2xl overflow-hidden shadow-[var(--shadow-lg)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.4)]">
         {isLoading && (
-          <GameOverlay type="loading" message={`Loading ${metadata?.name || 'game'}...`} />
+          <GameOverlay
+            type="loading"
+            message={`Loading ${metadata?.name || 'game'}...`}
+          />
         )}
 
         {error && (
@@ -249,7 +266,12 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
 
       {/* Leaderboard section */}
       {gameId && topScores.length > 0 && !isLoading && !error && (
-        <div className="mt-6 p-4 bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)]">
+        <div className="
+          mt-6 p-4 bg-[var(--color-bg-card)] rounded-xl
+          border border-[var(--color-border)]
+          shadow-[var(--shadow-sm)]
+          animate-[slideUp_400ms_ease-out_200ms_both]
+        ">
           <h2 className="text-base font-bold font-[var(--font-heading)] text-[var(--color-text)] mb-3 flex items-center gap-2">
             <span>🏆</span>
             Top Scores — {DIFFICULTIES[difficulty].emoji} {DIFFICULTIES[difficulty].label}
@@ -260,7 +282,12 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
 
       {/* Game info */}
       {metadata && (
-        <div className="mt-4 p-4 bg-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)]">
+        <div className="
+          mt-4 p-4 bg-[var(--color-bg-card)] rounded-xl
+          border border-[var(--color-border)]
+          shadow-[var(--shadow-sm)]
+          animate-[slideUp_400ms_ease-out_300ms_both]
+        ">
           <h2 className="text-sm font-bold text-[var(--color-text)] font-[var(--font-heading)] mb-1">
             How to Play
           </h2>
@@ -268,11 +295,21 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
             {metadata.longDescription || metadata.description}
           </p>
           <div className="flex flex-wrap gap-2 mt-2">
-            <span className="text-xs text-[var(--color-text-muted)]">
-              {metadata.supportsKeyboard && '⌨️ Keyboard'}
-              {metadata.supportsTouch && ' 👆 Touch'}
-              {metadata.supportsGamepad && ' 🎮 Gamepad'}
-            </span>
+            {metadata.supportsKeyboard && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-bg-hover)] text-[var(--color-text-secondary)]">
+                ⌨️ Keyboard
+              </span>
+            )}
+            {metadata.supportsTouch && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-bg-hover)] text-[var(--color-text-secondary)]">
+                👆 Touch
+              </span>
+            )}
+            {metadata.supportsGamepad && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-bg-hover)] text-[var(--color-text-secondary)]">
+                🎮 Gamepad
+              </span>
+            )}
           </div>
         </div>
       )}
@@ -292,3 +329,15 @@ export default function GamePage({ loadGame, gameMeta, isFavorite, onToggleFavor
     </div>
   );
 }
+
+/** Category emoji lookup */
+const CATEGORIES_EMOJI: Record<string, string> = {
+  'logic-puzzle': '🧩',
+  'arcade': '👾',
+  'board': '🎲',
+  'card': '🃏',
+  'strategy': '♟️',
+  'action': '⚡',
+  'sports': '⚽',
+  'casual': '🎈',
+};
