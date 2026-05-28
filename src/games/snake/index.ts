@@ -100,9 +100,19 @@ const snakeGame: PlayBoxGame = {
     import('kaboom').then((kaboomModule) => {
       const kaboom = kaboomModule.default;
 
+      // Create canvas and append to container BEFORE initializing Kaboom.
+      // Kaboom v3000 with stretch:true accesses canvas.parentElement.offsetWidth
+      // during init, so the canvas MUST be in the DOM first.
+      const canvas = document.createElement('canvas');
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.style.objectFit = 'contain';
+      canvas.style.touchAction = 'none';
+      container.appendChild(canvas);
+
       // Initialize Kaboom inside the container
       const k = kaboom({
-        canvas: document.createElement('canvas'),
+        canvas,
         width: params.cols * params.cellSize,
         height: params.rows * params.cellSize,
         background: [255, 251, 240], // Warm white #FFFBF0
@@ -112,14 +122,6 @@ const snakeGame: PlayBoxGame = {
         stretch: true,
         letterbox: true,
       });
-
-      // Append Kaboom's canvas to container
-      const kaboomCanvas = k.canvas;
-      kaboomCanvas.style.width = '100%';
-      kaboomCanvas.style.height = '100%';
-      kaboomCanvas.style.objectFit = 'contain';
-      kaboomCanvas.style.touchAction = 'none';
-      container.appendChild(kaboomCanvas);
 
       // ---- Game State ----
       type GameState = 'idle' | 'playing' | 'game_over';

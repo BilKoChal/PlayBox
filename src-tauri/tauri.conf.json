@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/nicegui/tauri-v2/main/tooling/cli/schema.json",
   "productName": "PlayBox",
   "version": "0.1.0",
-  "identifier": "com.playbox.app",
+  "identifier": "com.playbox.gamestation",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:3000",

@@ -125,8 +125,18 @@ const breakoutGame: PlayBoxGame = {
       const GAME_W = 800;
       const GAME_H = 450;
 
+      // Create canvas and append to container BEFORE initializing Kaboom.
+      // Kaboom v3000 with stretch:true accesses canvas.parentElement.offsetWidth
+      // during init, so the canvas MUST be in the DOM first.
+      const canvas = document.createElement('canvas');
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.style.objectFit = 'contain';
+      canvas.style.touchAction = 'none';
+      container.appendChild(canvas);
+
       const k = kaboom({
-        canvas: document.createElement('canvas'),
+        canvas,
         width: GAME_W,
         height: GAME_H,
         background: [26, 26, 46], // Deep navy
@@ -136,14 +146,6 @@ const breakoutGame: PlayBoxGame = {
         stretch: true,
         letterbox: true,
       });
-
-      // Append canvas
-      const kaboomCanvas = k.canvas;
-      kaboomCanvas.style.width = '100%';
-      kaboomCanvas.style.height = '100%';
-      kaboomCanvas.style.objectFit = 'contain';
-      kaboomCanvas.style.touchAction = 'none';
-      container.appendChild(kaboomCanvas);
 
       // ---- Constants ----
       const BRICK_COLS = 10;

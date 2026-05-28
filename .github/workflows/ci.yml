@@ -26,7 +26,7 @@ concurrency:
 env:
   NODE_VERSION: "20"
   PNPM_VERSION: "9"
-  RUST_VERSION: "1.77"
+  RUST_VERSION: "stable"
   JAVA_VERSION: "17"
 
 permissions:
@@ -205,10 +205,8 @@ jobs:
       - name: Build frontend
         run: pnpm build
 
-      - name: Install Capacitor CLI & core
-        run: |
-          pnpm add -D @capacitor/core @capacitor/cli
-          npx cap sync android
+      - name: Sync Capacitor
+        run: npx cap sync android
 
       - name: Build Android debug APK
         working-directory: android

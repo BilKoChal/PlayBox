@@ -19,6 +19,7 @@
     "check-games": "tsx scripts/check-game-interface.ts"
   },
   "dependencies": {
+    "@capacitor/core": "^8.3.4",
     "dexie": "^4.0.10",
     "dexie-react-hooks": "^1.1.7",
     "fuse.js": "^7.0.0",

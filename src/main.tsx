@@ -17,32 +17,6 @@ createRoot(rootElement).render(
   </StrictMode>
 );
 
-// Register PWA service worker
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/PlayBox/sw.js')
-      .then((registration) => {
-        console.log('PlayBox SW registered:', registration.scope);
-
-        // Listen for updates
-        registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing;
-          if (newWorker) {
-            newWorker.addEventListener('statechange', () => {
-              if (
-                newWorker.state === 'activated' &&
-                navigator.serviceWorker.controller
-              ) {
-                // New content is available — could show a toast here
-                console.log('PlayBox: New version available, refresh to update');
-              }
-            });
-          }
-        });
-      })
-      .catch((error) => {
-        console.log('PlayBox SW registration failed:', error);
-      });
-  });
-}
+// Service Worker registration is handled automatically by vite-plugin-pwa
+// with registerType: 'autoUpdate' in vite.config.ts.
+// No manual registration needed — the plugin injects the registration script.
