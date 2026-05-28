@@ -216,12 +216,13 @@ playbox/
 - [x] Implement basic routing: `/` (catalog), `/game/:gameId` (play)
 - **Note:** Also built UI components (Button, Toggle, SearchBar, Badge, Modal), feedback components (Toast, ScoreDisplay, EmptyState), pages (Favorites, Settings), hooks (useFavorites, useFullscreen, useSearch), and Footer. Tauri API accessed via runtime `__TAURI_INTERNALS__` to prevent build errors. See [worklog](worklogs/2%20-%20worklog.md).
 
-#### 0.3 — Shared Services (Core)
-- Implement `SoundManager` class (Web Audio API, 3 categories, global mute, lazy init)
-- Implement `ScoreTracker` with Dexie.js (IndexedDB, score submission, top-10 query)
-- Implement `FavoritesManager` (localStorage, max 20, toggle)
-- Implement `FullscreenService` (web Fullscreen API + Tauri + Capacitor abstraction)
-- Implement platform detection (`src/lib/platform.ts`)
+#### 0.3 — Shared Services (Core) ✅ COMPLETE (2026-05-28)
+- [x] Implement `SoundManager` class (Web Audio API, 3 categories, global mute, lazy init)
+- [x] Implement `ScoreTracker` with Dexie.js (IndexedDB, score submission, top-10 query)
+- [x] Implement `FavoritesManager` (localStorage, max 20, toggle)
+- [x] Implement `FullscreenService` (web Fullscreen API + Tauri + Capacitor abstraction)
+- [x] Implement platform detection (`src/lib/platform.ts`)
+- **Note:** Also created ScoreFormatter, PlayerNameManager, SettingsManager, procedural sound generation, online/offline and preference change event systems. See [worklog](worklogs/3%20-%20worklog.md).
 
 #### 0.4 — MVP Games (3 Games)
 - **Sudoku** (Canvas, Logic/Puzzle) — Full implementation with 3 difficulties, scoring by time, AI solver for validation

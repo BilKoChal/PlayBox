@@ -1,35 +1,20 @@
-import { useState, useCallback, useEffect } from 'react';
-
-const STORAGE_KEY = 'playbox-favorites';
-const MAX_FAVORITES = 20;
+import { useState, useEffect, useCallback } from 'react';
+import { favoritesManager } from '@/lib/favorites';
 
 export function useFavorites() {
-  const [favorites, setFavorites] = useState<string[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [favorites, setFavorites] = useState<string[]>(() => favoritesManager.getAll());
 
+  // Listen for external changes to favorites
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
-    } catch {}
-  }, [favorites]);
+    const unsubscribe = favoritesManager.onChange((updatedFavorites) => {
+      setFavorites(updatedFavorites);
+    });
+    return unsubscribe;
+  }, []);
 
   const toggleFavorite = useCallback((gameId: string) => {
-    setFavorites((prev) => {
-      if (prev.includes(gameId)) {
-        return prev.filter((id) => id !== gameId);
-      }
-      if (prev.length >= MAX_FAVORITES) {
-        // Remove oldest favorite to make room
-        return [...prev.slice(1), gameId];
-      }
-      return [...prev, gameId];
-    });
+    favoritesManager.toggle(gameId);
+    // State will be updated via the change listener
   }, []);
 
   const isFavorite = useCallback(
@@ -38,7 +23,15 @@ export function useFavorites() {
   );
 
   const clearFavorites = useCallback(() => {
-    setFavorites([]);
+    favoritesManager.clear();
+  }, []);
+
+  const addFavorite = useCallback((gameId: string) => {
+    favoritesManager.add(gameId);
+  }, []);
+
+  const removeFavorite = useCallback((gameId: string) => {
+    favoritesManager.remove(gameId);
   }, []);
 
   return {
@@ -46,6 +39,10 @@ export function useFavorites() {
     toggleFavorite,
     isFavorite,
     clearFavorites,
-    maxFavorites: MAX_FAVORITES,
+    addFavorite,
+    removeFavorite,
+    maxFavorites: favoritesManager.getMaxFavorites(),
+    isFull: favoritesManager.isFull(),
+    count: favoritesManager.getCount(),
   };
 }
