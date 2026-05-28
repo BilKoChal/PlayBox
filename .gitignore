@@ -38,6 +38,9 @@ vite.config.js
 vite.config.d.ts
 vite.config.d.ts.map
 
+# pnpm workspace (not needed for single-package project)
+pnpm-workspace.yaml
+
 # Vitest coverage
 coverage/
 
