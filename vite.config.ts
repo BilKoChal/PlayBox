@@ -172,6 +172,12 @@ export default defineConfig({
 
   build: {
     target: 'es2020',
+    // Disable minification — Kaboom v3000 ships pre-minified and
+    // re-minifying with esbuild causes "assignment to undeclared variable" errors.
+    // Also keeps code readable for debugging.
+    minify: false,
+    // Generate sourcemaps for production debugging
+    sourcemap: true,
     rollupOptions: {
       output: {
         // Manual chunks for engine code splitting
