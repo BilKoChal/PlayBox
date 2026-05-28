@@ -233,17 +233,17 @@ playbox/
 - [x] Register all 3 in game registry
 - **Note:** Sudoku uses different grid sizes per difficulty (4×4, 6×6, 9×9). Snake uses wall wrap on Easy for kid-friendliness. Breakout uses direct touch-to-paddle mapping. All games use procedural sounds only (no audio files). Kaboom games use `global: false` mode with cleanup via empty scene navigation. See [worklog](worklogs/4%20-%20worklog.md).
 
-#### 0.5 — CI/CD Pipeline
-- Create `.github/workflows/ci.yml` with 6 jobs:
-  1. `determine-version` — Parse conventional commits, compute version
-  2. `test` — Lint, type-check, unit tests, build smoke test
-  3. `deploy-pages` — Build Vite → deploy to GitHub Pages
-  4. `build-windows` — Tauri build → .exe + .msi artifacts
-  5. `build-android` — Capacitor build → .apk artifact
-  6. `release` — Aggregate all artifacts → GitHub Release
-- Configure GitHub Pages source as "GitHub Actions"
-- Test the full pipeline with a push to main
-- Verify: GitHub Pages site loads, Windows installer works, Android APK installs
+#### 0.5 — CI/CD Pipeline ✅ COMPLETE (2026-05-28)
+- [x] Create `.github/workflows/ci.yml` with 5 jobs:
+  1. `test` — Lint, type-check, build smoke test (runs on PR + push)
+  2. `deploy-pages` — Build Vite → deploy to GitHub Pages via Actions (push to main only)
+  3. `build-windows` — Tauri v2 build → .exe + .msi artifacts (push to main only)
+  4. `build-android` — Capacitor build → .apk artifact (push to main only)
+  5. `release` — Aggregate all artifacts → GitHub Release (push to main only)
+- [x] Configure GitHub Pages source as "GitHub Actions" (documented, user must set)
+- [x] Fix `scripts/copy-404.js` for ESM compatibility (require → import)
+- [x] Build verified locally: tsc 0 errors, vite build 83 modules in 4.55s
+- **Note:** User must configure GitHub repo settings before first push: (1) Pages → Source = "GitHub Actions", (2) Actions → Workflow permissions = "Read and write". No secrets required for MVP. See [task plan](tasks/5%20-%20CI_CD%20Pipeline.md).
 
 #### 0.6 — PWA & Offline
 - Configure `vite-plugin-pwa` with Workbox

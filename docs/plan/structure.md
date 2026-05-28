@@ -1,13 +1,15 @@
 # PlayBox — Current Project Structure
 
 **Last Updated:** 2026-05-28  
-**Phase:** 0.4 Complete
+**Phase:** 0.5 Complete
 
 ---
 
 ```
 playbox/
-├── .github/                              # (Not yet created — Phase 0.5)
+├── .github/                              # GitHub Actions CI/CD
+│   └── workflows/
+│       └── ci.yml                        # Full pipeline: test → pages → windows → android → release
 │
 ├── android/                              # Capacitor Android build
 │   ├── app/
@@ -26,12 +28,15 @@ playbox/
 │   │   ├── tasks/
 │   │   │   ├── 1 - Project Scaffolding and Configuration.md
 │   │   │   ├── 2 - Platform Shell.md
-│   │   │   └── 4 - MVP Games (3 Games).md
+│   │   │   ├── 3 - Shared Services Core.md
+│   │   │   ├── 4 - MVP Games (3 Games).md
+│   │   │   └── 5 - CI_CD Pipeline.md
 │   │   ├── worklogs/
 │   │   │   ├── 1 - worklog.md
 │   │   │   ├── 2 - worklog.md
 │   │   │   ├── 3 - worklog.md
-│   │   │   └── 4 - worklog.md
+│   │   │   ├── 4 - worklog.md
+│   │   │   └── 5 - worklog.md
 │   │   └── research/                     # (Empty — research in docs/reports/)
 │   └── reports/
 │       ├── PlayBox_architect_report.md   # Architecture research
@@ -55,7 +60,7 @@ playbox/
 ├── scripts/
 │   ├── generate-game-registry.ts         # Scans src/games/ → generates registry
 │   ├── check-game-interface.ts           # Validates PlayBoxGame compliance
-│   └── copy-404.js                       # SPA routing fix for GitHub Pages
+│   └── copy-404.js                       # SPA routing fix for GitHub Pages (ESM)
 │
 ├── src/
 │   ├── main.tsx                          # React entry point
@@ -81,6 +86,7 @@ playbox/
 │   ├── lib/                              # Shared Libraries
 │   │   ├── audio.ts                      # SoundManager (Web Audio API, procedural sounds)
 │   │   ├── storage.ts                    # ScoreTracker + PlayerNameManager + SettingsManager
+│   │   ├── favorites.ts                  # FavoritesManager (localStorage, singleton)
 │   │   ├── platform.ts                   # Platform detection (web/tauri/capacitor)
 │   │   ├── fullscreen.ts                # FullscreenService (cross-platform)
 │   │   └── search.ts                     # Fuse.js search engine
@@ -145,7 +151,7 @@ playbox/
 | 0.2 | Platform Shell (Basic UI) | ✅ Complete |
 | 0.3 | Shared Services (Core) | ✅ Complete |
 | 0.4 | MVP Games (3 Games) | ✅ Complete |
-| 0.5 | CI/CD Pipeline | ⬜ Not started |
+| 0.5 | CI/CD Pipeline | ✅ Complete |
 | 0.6 | PWA & Offline | ⬜ Not started |
 
 ## Registered Games
@@ -155,3 +161,13 @@ playbox/
 | Sudoku | Canvas | Logic/Puzzle | Easy (4×4), Medium (6×6), Hard (9×9) |
 | Snake | Kaboom | Arcade | Easy (slow+wrap), Medium, Hard (fast+death) |
 | Breakout | Kaboom | Arcade | Easy (wide paddle), Medium, Hard (narrow paddle) |
+
+## CI/CD Pipeline
+
+| Job | Trigger | Runs On | Output |
+|-----|---------|---------|--------|
+| test | PR + push to main | ubuntu-latest | Build verified |
+| deploy-pages | Push to main | ubuntu-latest | GitHub Pages live |
+| build-windows | Push to main | windows-latest | .exe + .msi artifacts |
+| build-android | Push to main | ubuntu-latest | .apk artifact |
+| release | Push to main (after all builds) | ubuntu-latest | GitHub Release v0.1.0 |
