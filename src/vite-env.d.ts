@@ -47,16 +47,6 @@ declare module '*.wav' {
   export default content;
 }
 
-// Tauri API — only available at runtime in Tauri desktop app
-// Declared here so TypeScript doesn't error on dynamic imports
-declare module '@tauri-apps/api/window' {
-  export function getCurrentWindow(): {
-    setFullscreen(flag: boolean): Promise<void>;
-    setTitle(title: string): Promise<void>;
-    close(): Promise<void>;
-  };
-}
-
 // PWA register type
 declare module 'virtual:pwa-register' {
   export interface RegisterSWOptions {

@@ -3,10 +3,13 @@
  *
  * Cross-platform fullscreen support:
  * - Web: Fullscreen API
- * - Tauri: Tauri window API
- * - Capacitor: Android immersive mode
+ * - Tauri: Tauri window API (accessed via runtime __TAURI_INTERNALS__)
+ * - Capacitor: Android immersive mode (future)
  *
- * Will be fully implemented in Phase 0.3 (Shared Services).
+ * IMPORTANT: We do NOT import @tauri-apps/api directly.
+ * Instead, we access Tauri APIs through the global __TAURI_INTERNALS__ object
+ * at runtime. This prevents Rollup from trying to resolve the Tauri package
+ * during the web build (where it's not installed).
  */
 
 import { platform } from './platform';
@@ -22,39 +25,29 @@ export class FullscreenService {
   /** Enter fullscreen mode */
   async enterFullscreen(): Promise<void> {
     if (platform.type === 'tauri') {
-      // Tauri: use window API
       try {
-        // Dynamic import — only available in Tauri environment
-        const tauriWindow = await import('@tauri-apps/api/window');
-        await tauriWindow.getCurrentWindow().setFullscreen(true);
+        await this.tauriSetFullscreen(true);
         this.isFullscreenState = true;
+        return;
       } catch {
         // Fallback to web API
-        await this.webEnterFullscreen();
       }
-    } else if (platform.type === 'capacitor') {
-      // Capacitor: use Android immersive mode (via plugin)
-      // Will be implemented when Capacitor plugins are added
-      await this.webEnterFullscreen();
-    } else {
-      await this.webEnterFullscreen();
     }
+    await this.webEnterFullscreen();
   }
 
   /** Exit fullscreen mode */
   async exitFullscreen(): Promise<void> {
     if (platform.type === 'tauri') {
       try {
-        // Dynamic import — only available in Tauri environment
-        const tauriWindow = await import('@tauri-apps/api/window');
-        await tauriWindow.getCurrentWindow().setFullscreen(false);
+        await this.tauriSetFullscreen(false);
         this.isFullscreenState = false;
+        return;
       } catch {
-        await this.webExitFullscreen();
+        // Fallback to web API
       }
-    } else {
-      await this.webExitFullscreen();
     }
+    await this.webExitFullscreen();
   }
 
   /** Toggle fullscreen */
@@ -64,6 +57,36 @@ export class FullscreenService {
     } else {
       await this.enterFullscreen();
     }
+  }
+
+  /**
+   * Access Tauri fullscreen API via the global runtime.
+   * This avoids any static import of @tauri-apps/api.
+   */
+  private async tauriSetFullscreen(flag: boolean): Promise<void> {
+    const internals = (window as any).__TAURI_INTERNALS__;
+    if (!internals) {
+      throw new Error('Tauri internals not available');
+    }
+
+    // Use Tauri's invoke protocol through the internal API
+    // The window plugin is available at __TAURI_INTERNALS__.invoke
+    // or we can use the proper Tauri window API if available
+    if (internals.window) {
+      const win = internals.window.getCurrent();
+      if (win?.setFullscreen) {
+        await win.setFullscreen(flag);
+        return;
+      }
+    }
+
+    // Alternative: use the Tauri invoke command
+    if (internals.invoke) {
+      await internals.invoke('plugin:window|set_fullscreen', { label: null, flag });
+      return;
+    }
+
+    throw new Error('Could not access Tauri window API');
   }
 
   private async webEnterFullscreen(): Promise<void> {

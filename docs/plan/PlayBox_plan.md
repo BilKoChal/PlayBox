@@ -204,16 +204,17 @@ playbox/
 - [x] Write `scripts/copy-404.js` for SPA routing on GitHub Pages
 - **Note:** Also created lib stubs (audio, storage, platform, fullscreen, search), contexts (Theme, Sound, Game), and game-registry helpers. Kaboom is deprecated — consider KAPLAY migration in Phase 1. See [worklog](worklogs/1%20-%20worklog.md).
 
-#### 0.2 — Platform Shell (Basic UI)
-- Build `App.tsx` with React Router + ThemeProvider + SoundProvider
-- Build `Header` component (logo, search placeholder, sound/theme toggles)
-- Build `HomePage` with responsive game grid (grid-cols-1 to grid-cols-4)
-- Build `GameCard` component (thumbnail, title, category dot, difficulty stars, favorite heart)
-- Build `GameWrapper` component (the bridge between React and PlayBoxGame interface)
-- Build `GamePage` with lazy loading via dynamic imports
-- Implement basic `ThemeContext` (light/dark toggle with localStorage persistence)
-- Implement basic `SoundContext` (global mute toggle)
-- Implement basic routing: `/` (catalog), `/game/:gameId` (play)
+#### 0.2 — Platform Shell (Basic UI) ✅ COMPLETE (2026-05-28)
+- [x] Build `App.tsx` with React Router + ThemeProvider + SoundProvider
+- [x] Build `Header` component (logo, search placeholder, sound/theme toggles)
+- [x] Build `HomePage` with responsive game grid (grid-cols-1 to grid-cols-4)
+- [x] Build `GameCard` component (thumbnail, title, category dot, difficulty stars, favorite heart)
+- [x] Build `GameWrapper` component (the bridge between React and PlayBoxGame interface)
+- [x] Build `GamePage` with lazy loading via dynamic imports
+- [x] Implement basic `ThemeContext` (light/dark toggle with localStorage persistence)
+- [x] Implement basic `SoundContext` (global mute toggle)
+- [x] Implement basic routing: `/` (catalog), `/game/:gameId` (play)
+- **Note:** Also built UI components (Button, Toggle, SearchBar, Badge, Modal), feedback components (Toast, ScoreDisplay, EmptyState), pages (Favorites, Settings), hooks (useFavorites, useFullscreen, useSearch), and Footer. Tauri API accessed via runtime `__TAURI_INTERNALS__` to prevent build errors. See [worklog](worklogs/2%20-%20worklog.md).
 
 #### 0.3 — Shared Services (Core)
 - Implement `SoundManager` class (Web Audio API, 3 categories, global mute, lazy init)
