@@ -1,0 +1,5 @@
+# PlayBox - PWA Game Station
+User-agent: *
+Allow: /
+
+Sitemap: /PlayBox/sitemap.xml
