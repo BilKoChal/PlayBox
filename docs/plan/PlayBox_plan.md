@@ -224,13 +224,14 @@ playbox/
 - [x] Implement platform detection (`src/lib/platform.ts`)
 - **Note:** Also created ScoreFormatter, PlayerNameManager, SettingsManager, procedural sound generation, online/offline and preference change event systems. See [worklog](worklogs/3%20-%20worklog.md).
 
-#### 0.4 — MVP Games (3 Games)
-- **Sudoku** (Canvas, Logic/Puzzle) — Full implementation with 3 difficulties, scoring by time, AI solver for validation
-- **Snake** (Kaboom, Arcade) — Full implementation with 3 speeds, scoring by length, sound effects
-- **Breakout** (Kaboom, Arcade) — Full implementation with 3 difficulties, scoring, collision detection
-- Each game implements `PlayBoxGame` interface with metadata, mount, unmount, pause, resume
-- Generate thumbnails for each game
-- Register all 3 in game registry
+#### 0.4 — MVP Games (3 Games) ✅ COMPLETE (2026-05-28)
+- [x] **Sudoku** (Canvas, Logic/Puzzle) — Full implementation with 3 difficulties, scoring by time, AI solver for validation
+- [x] **Snake** (Kaboom, Arcade) — Full implementation with 3 speeds, scoring by length, sound effects
+- [x] **Breakout** (Kaboom, Arcade) — Full implementation with 3 difficulties, scoring, collision detection
+- [x] Each game implements `PlayBoxGame` interface with metadata, mount, unmount, pause, resume
+- [x] Generate thumbnails for each game (AI-generated via z-ai-generate)
+- [x] Register all 3 in game registry
+- **Note:** Sudoku uses different grid sizes per difficulty (4×4, 6×6, 9×9). Snake uses wall wrap on Easy for kid-friendliness. Breakout uses direct touch-to-paddle mapping. All games use procedural sounds only (no audio files). Kaboom games use `global: false` mode with cleanup via empty scene navigation. See [worklog](worklogs/4%20-%20worklog.md).
 
 #### 0.5 — CI/CD Pipeline
 - Create `.github/workflows/ci.yml` with 6 jobs:

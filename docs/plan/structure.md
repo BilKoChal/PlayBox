@@ -1,7 +1,7 @@
 # PlayBox — Current Project Structure
 
 **Last Updated:** 2026-05-28  
-**Phase:** 0.1 Complete
+**Phase:** 0.4 Complete
 
 ---
 
@@ -24,9 +24,14 @@ playbox/
 │   │   ├── PlayBox_synthesis.md          # Research synthesis
 │   │   ├── structure.md                  # THIS FILE — project structure
 │   │   ├── tasks/
-│   │   │   └── 1 - Project Scaffolding and Configuration.md
+│   │   │   ├── 1 - Project Scaffolding and Configuration.md
+│   │   │   ├── 2 - Platform Shell.md
+│   │   │   └── 4 - MVP Games (3 Games).md
 │   │   ├── worklogs/
-│   │   │   └── 1 - worklog.md
+│   │   │   ├── 1 - worklog.md
+│   │   │   ├── 2 - worklog.md
+│   │   │   ├── 3 - worklog.md
+│   │   │   └── 4 - worklog.md
 │   │   └── research/                     # (Empty — research in docs/reports/)
 │   └── reports/
 │       ├── PlayBox_architect_report.md   # Architecture research
@@ -37,7 +42,13 @@ playbox/
 │
 ├── public/
 │   ├── icons/                            # PWA icons (placeholder)
-│   ├── games/                            # Static game assets (placeholder)
+│   ├── games/                            # Game assets & thumbnails
+│   │   ├── sudoku/
+│   │   │   └── thumbnail.png             # AI-generated Sudoku thumbnail
+│   │   ├── snake/
+│   │   │   └── thumbnail.png             # AI-generated Snake thumbnail
+│   │   └── breakout/
+│   │       └── thumbnail.png             # AI-generated Breakout thumbnail
 │   ├── manifest.json                     # PWA manifest
 │   └── robots.txt                        # Robots file
 │
@@ -48,32 +59,48 @@ playbox/
 │
 ├── src/
 │   ├── main.tsx                          # React entry point
-│   ├── App.tsx                           # Root component (minimal shell)
+│   ├── App.tsx                           # Root component with routing + providers
 │   ├── vite-env.d.ts                     # Vite + Tauri + PWA type declarations
 │   │
 │   ├── components/                       # UI Components
-│   │   ├── layout/                       # (Empty — Phase 0.2)
-│   │   ├── game/                         # (Empty — Phase 0.2)
-│   │   ├── ui/                           # (Empty — Phase 0.2)
-│   │   └── feedback/                     # (Empty — Phase 0.2)
+│   │   ├── layout/                       # Header, Footer
+│   │   ├── game/                         # GameCard, GameWrapper, GameOverlay
+│   │   ├── ui/                           # Button, Toggle, SearchBar, Badge, Modal
+│   │   └── feedback/                     # Toast, ScoreDisplay, EmptyState
 │   │
 │   ├── contexts/                         # React Contexts
 │   │   ├── ThemeContext.tsx              # Light/dark theme toggle
 │   │   ├── SoundContext.tsx             # Global mute toggle
 │   │   └── GameContext.tsx              # Active game tracking
 │   │
-│   ├── hooks/                            # Custom Hooks (Empty — Phase 0.2/0.3)
+│   ├── hooks/                            # Custom Hooks
+│   │   ├── useFavorites.ts              # Favorites management
+│   │   ├── useFullscreen.ts             # Fullscreen API hook
+│   │   └── useSearch.ts                 # Search with debounce
 │   │
 │   ├── lib/                              # Shared Libraries
-│   │   ├── audio.ts                      # SoundManager (Web Audio API stub)
-│   │   ├── storage.ts                    # ScoreTracker (Dexie.js + IndexedDB)
+│   │   ├── audio.ts                      # SoundManager (Web Audio API, procedural sounds)
+│   │   ├── storage.ts                    # ScoreTracker + PlayerNameManager + SettingsManager
 │   │   ├── platform.ts                   # Platform detection (web/tauri/capacitor)
 │   │   ├── fullscreen.ts                # FullscreenService (cross-platform)
 │   │   └── search.ts                     # Fuse.js search engine
 │   │
-│   ├── pages/                            # Page Components (Empty — Phase 0.2)
+│   ├── pages/                            # Page Components
+│   │   ├── HomePage.tsx                  # Game catalog
+│   │   ├── GamePage.tsx                  # Individual game play
+│   │   ├── FavoritesPage.tsx             # Favorites collection
+│   │   └── SettingsPage.tsx             # Global settings
 │   │
-│   ├── games/                            # All Games (Empty — Phase 0.4)
+│   ├── games/                            # ★ ALL GAMES LIVE HERE
+│   │   ├── sudoku/                       # Sudoku (Canvas, Logic/Puzzle)
+│   │   │   ├── index.ts                  # PlayBoxGame implementation
+│   │   │   ├── SudokuGame.ts             # Core logic (generation, solving)
+│   │   │   ├── SudokuRenderer.ts         # Canvas 2D rendering
+│   │   │   └── types.ts                  # Sudoku-specific types
+│   │   ├── snake/                        # Snake (Kaboom, Arcade)
+│   │   │   └── index.ts                  # Complete Snake game
+│   │   └── breakout/                     # Breakout (Kaboom, Arcade)
+│   │       └── index.ts                  # Complete Breakout game
 │   │
 │   ├── types/
 │   │   └── game.ts                       # ★ PlayBoxGame interface (canonical)
@@ -82,7 +109,7 @@ playbox/
 │   │   └── globals.css                   # Tailwind + PlayBox design tokens
 │   │
 │   ├── game-registry.ts                  # Registry lookup helpers
-│   └── game-registry.generated.ts        # (Auto-generated — Phase 0.4)
+│   └── game-registry.generated.ts        # ★ Game registry (3 games registered)
 │
 ├── src-tauri/                            # Tauri v2 (Windows desktop)
 │   ├── Cargo.toml                        # Rust manifest
@@ -98,7 +125,7 @@ playbox/
 ├── pnpm-lock.yaml                        # Lock file
 ├── tsconfig.json                         # TypeScript config (strict)
 ├── tsconfig.node.json                    # TypeScript node config (composite)
-├── vite.config.ts                        # Vite build config
+├── vite.config.ts                        # Vite build config (code splitting)
 ├── postcss.config.js                     # PostCSS config
 ├── .eslintrc.cjs                         # ESLint config
 ├── .prettierrc                           # Prettier config
@@ -115,8 +142,16 @@ playbox/
 | Phase | Sub-Phase | Status |
 |-------|-----------|--------|
 | 0.1 | Project Scaffolding & Configuration | ✅ Complete |
-| 0.2 | Platform Shell (Basic UI) | ⬜ Not started |
-| 0.3 | Shared Services (Core) | ⬜ Not started |
-| 0.4 | MVP Games (3 Games) | ⬜ Not started |
+| 0.2 | Platform Shell (Basic UI) | ✅ Complete |
+| 0.3 | Shared Services (Core) | ✅ Complete |
+| 0.4 | MVP Games (3 Games) | ✅ Complete |
 | 0.5 | CI/CD Pipeline | ⬜ Not started |
 | 0.6 | PWA & Offline | ⬜ Not started |
+
+## Registered Games
+
+| Game | Engine | Category | Difficulties |
+|------|--------|----------|-------------|
+| Sudoku | Canvas | Logic/Puzzle | Easy (4×4), Medium (6×6), Hard (9×9) |
+| Snake | Kaboom | Arcade | Easy (slow+wrap), Medium, Hard (fast+death) |
+| Breakout | Kaboom | Arcade | Easy (wide paddle), Medium, Hard (narrow paddle) |
