@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Debug logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Vitest coverage
+coverage/
+
+# Tauri build output
+src-tauri/target/
+
+# Android build output
+android/.gradle/
+android/app/build/
+android/build/
+
+# PWA dev dist
+dev-dist/
+
+# Playwright
+test-results/
+playwright-report/

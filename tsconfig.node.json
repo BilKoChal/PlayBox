@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+
+    /* Composite project — emit declarations only */
+    "composite": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Node types for scripts and config */
+    "types": ["node"]
+  },
+  "include": ["vite.config.ts", "capacitor.config.ts"]
+}

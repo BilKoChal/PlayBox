@@ -188,20 +188,21 @@ playbox/
 - Complete game interface contract validated with 3 engines
 - Basic PWA (installable, offline shell)
 
-#### 0.1 — Project Scaffolding & Configuration
-- Initialize Git repo with `main` branch
-- Create Vite + React + TypeScript project
-- Configure Tailwind CSS with PlayBox design tokens (candy palette, Nunito/Quicksand fonts)
-- Configure ESLint + Prettier
-- Create project folder structure (src/components, src/hooks, src/games, etc.)
-- Configure `vite.config.ts` with code splitting (`manualChunks` for engines)
-- Create `src/types/game.ts` with canonical `PlayBoxGame` interface
-- Set up `src-tauri/` (Tauri v2 config, Cargo.toml)
-- Set up `android/` (Capacitor config, build.gradle)
-- Create `manifest.json` for PWA
-- Create `index.html` with font preconnects
-- Write `scripts/generate-game-registry.ts`
-- Write `scripts/copy-404.js` for SPA routing on GitHub Pages
+#### 0.1 — Project Scaffolding & Configuration ✅ COMPLETE (2026-05-28)
+- [x] Initialize Git repo with `main` branch
+- [x] Create Vite + React + TypeScript project
+- [x] Configure Tailwind CSS with PlayBox design tokens (candy palette, Nunito/Quicksand fonts)
+- [x] Configure ESLint + Prettier
+- [x] Create project folder structure (src/components, src/hooks, src/games, etc.)
+- [x] Configure `vite.config.ts` with code splitting (`manualChunks` for engines)
+- [x] Create `src/types/game.ts` with canonical `PlayBoxGame` interface
+- [x] Set up `src-tauri/` (Tauri v2 config, Cargo.toml)
+- [x] Set up `android/` (Capacitor config, build.gradle)
+- [x] Create `manifest.json` for PWA
+- [x] Create `index.html` with font preconnects
+- [x] Write `scripts/generate-game-registry.ts`
+- [x] Write `scripts/copy-404.js` for SPA routing on GitHub Pages
+- **Note:** Also created lib stubs (audio, storage, platform, fullscreen, search), contexts (Theme, Sound, Game), and game-registry helpers. Kaboom is deprecated — consider KAPLAY migration in Phase 1. See [worklog](worklogs/1%20-%20worklog.md).
 
 #### 0.2 — Platform Shell (Basic UI)
 - Build `App.tsx` with React Router + ThemeProvider + SoundProvider
