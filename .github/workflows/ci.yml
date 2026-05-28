@@ -4,7 +4,7 @@
 #   - Push to main     → full pipeline (test + deploy pages + build native + release)
 #   - Pull Request     → test only (lint, type-check, build smoke test)
 #
-# GitHub Repo Settings Required (see README or task docs):
+# GitHub Repo Settings Required:
 #   1. Settings → Pages → Source: "GitHub Actions"
 #   2. Settings → Actions → General → Workflow permissions: "Read and write"
 #
@@ -30,9 +30,9 @@ env:
   JAVA_VERSION: "17"
 
 permissions:
-  contents: write        # Create releases, push pages
-  pages: write           # Deploy to GitHub Pages
-  id-token: write        # OIDC for deployment
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   # ─── Job 1: Test ────────────────────────────────────────────────────────
@@ -47,6 +47,7 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -119,6 +120,7 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -174,6 +176,7 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
